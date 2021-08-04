@@ -3,13 +3,14 @@
 \pagestyle{empty}
 \title{Final project}
 \author{Jiawen Bi}
+\allowdisplaybreaks
 \date{\today}
 \begin{document}
 \maketitle
 The whole function is $$
-    P(x) = \sum_{i=0}^n P_i F_i^k(x)
+    P(x) = \sum_{i=0}^n P_i B_i^k(x)
    	$$
-where $P_i$ is the de Boor point, $F_i^k(x)$ is the basis function according to the handout. 
+where $P_i$ is the de Boor point, $B_i^k(x)$ is the basis function according to the handout. 
 I am going to use the cubic B-spline curve to fit the pattern.
 We know according to Example 4.26 that the basis quadratic B-spline $$
 	B_i^2(x) = \begin{dcases}
@@ -38,18 +39,37 @@ since $\displaystyle P(x) = \sum P_iB_i^3(x) $, thus for every interval$\display
 	&= P_i\frac{x^3 - 3t_{i-1}x^2 + 3t_{i-1}^2x - t_{i-1}^3}  {(t_{i+2} - t_{i-1})(t_{i+1} - t_{i-1})(t_i - t_{i-1})} \\
 	&+ P_{i-1}\frac{-x^3 + (2t_{i-2}+t_{i+2})x^2 - (t_{i-2}^2+2t_{i-2}t_{i+2})x + t_{i+2}t_{i-2}^2}  {(t_{i+2} - t_{i-1})(t_{i-1} - t_{i-2})(t_i - t_{i-2})} \\
 	&+ P_{i-1}\frac{-x^3 + (2t_{i-2}+t_i)x^2 - (t_{i-2}^2+2t_{i-2}t_i)x + t_{i-2}^2t_i}  {(t_{i+1} - t_{i-2})(t_i - t_{i-2})(t_i-t_{i-1})} \\
-	&+ P_{i-1}\frac{-x^3 + (t_{i-1}+t_{i+1}+t_{i-2})x^2 - (t_{i-1}t_{i+1}+t_{i-2}t_{i-1}+t_{i-2}t_{i+1})x-t_{i-1}t_{i+1}t_{i-2}}  {(t_{i+1}-t_{i-1})(t_i-t_{i-1})(t_{i-1}-t_{i-2})} \\
-	&+ P_{i-2}\frac{x^3 - (2t_i+t_{i-3})x^2 + (t_i^2+2t_it_{i-3})x - t_i^2t_{i-3}}{(t_i-t_{i-3})(t_i-t_{i-2})(t_i-t_{i-1})} \\
+	&+ P_{i-1}\frac{-x^3 + (t_{i-1}+t_{i+1}+t_{i-2})x^2 - (t_{i-1}t_{i+1}+t_{i-2}t_{i-1}+t_{i-2}t_{i+1})x+t_{i-1}t_{i+1}t_{i-2}}  {(t_{i+1}-t_{i-1})(t_i-t_{i-1})(t_{i-1}-t_{i-2})} \\
+	&+ P_{i-2}\frac{x^3 - (2t_i+t_{i-3})x^2 + (t_i^2+2t_it_{i-3})x - t_i^2t_{i-3}}  {(t_i-t_{i-3})(t_i-t_{i-2})(t_i-t_{i-1})} \\
 	&+ P_{i-2}\frac{x^3 - (t_{i+1}+t_{i-1}+t_{i-3})x^2 + (t_{i-1}t_{i+1}+t_{i+1}t_{i-3}+t_{i-1}t_{i-3})x - t_{i+1}t_{i-1}t_{i-3}}  {(t_{i-1}-t_{i-3})(t_{i-1}-t_{i-2})(t_i-t_{i-2})} \\
 	&+ P_{i-2}\frac{x^3 - (t_i+t_{i+1}+t_{i-2})x^2 + (t_it_{i-1}+t_it_{i-2}+t_{i+1}t_{i-2})x - t_it_{i+1}t_{i-2}}  {(t_{i+1}-t_{i-2})(t_i-t_{i-2})(t_{i-1}-t_{i-2})} \\
 	&+ P_{i-3}\frac{-x^3 + (2t_{i-1}+t_i)x^2 - (t_{i-1}^2+2t_it_{i-1})x + t_{i-1}^2t_i}  {(t_i-t_{i-3})(t_{i-1}-t_{i-3})(t_{i-1}-t_{i-2})}
 \end{align*}
-
+Then $\displaystyle P(x) = [\frac{P_i}{(t_{i+2} - t_{i-1})(t_{i+1} - t_{i-1})(t_i - t_{i-1})} - \frac{P_{i-1}}{(t_{i+2} - t_{i-1})(t_{i-1} - t_{i-2})(t_i - t_{i-2})}\\ 
+-\frac{P_{i-1}}{(t_{i+1} - t_{i-2})(t_i - t_{i-2})(t_i-t_{i-1})} - \frac{P_{i-1}}{(t_{i+1}-t_{i-1})(t_i-t_{i-1})(t_{i-1}-t_{i-2})} \\
++ \frac{P_{i-2}}{(t_i-t_{i-3})(t_i-t_{i-2})(t_i-t_{i-1})} + \frac{P_{i-2}}{(t_{i-1}-t_{i-3})(t_{i-1}-t_{i-2})(t_i-t_{i-2})} \\
++ \frac{P_{i-2}}{(t_{i+1}-t_{i-2})(t_i-t_{i-2})(t_{i-1}-t_{i-2})} - \frac{P_{i-3}}{(t_i-t_{i-3})(t_{i-1}-t_{i-3})(t_{i-1}-t_{i-2})}]
+\cdot x^3 \\
++ [-\frac{P_i\cdot 3t_{i-1}}{(t_{i+2} - t_{i-1})(t_{i+1} - t_{i-1})(t_i - t_{i-1})}  +  \frac{P_{i-1}(2t_{i-2}+t_{i+2})}{(t_{i+2} - t_{i-1})(t_{i-1} - t_{i-2})(t_i - t_{i-2})}\\
++ \frac{P_{i-1}(2t_{i-2}+t_i)}{(t_{i+1} - t_{i-2})(t_i - t_{i-2})(t_i-t_{i-1})}  +  \frac{P_{i-1}(t_{i-1}+t_{i+1}+t_{i-2})}{(t_{i+1}-t_{i-1})(t_i-t_{i-1})(t_{i-1}-t_{i-2})} \\
+- \frac{P_{i-2}(2t_i+t_{i-3})}{(t_i-t_{i-3})(t_i-t_{i-2})(t_i-t_{i-1})}  -  \frac{P_{i-2}(t_{i+1}+t_{i-1}+t_{i-3})}{(t_{i-1}-t_{i-3})(t_{i-1}-t_{i-2})(t_i-t_{i-2})} \\
+- \frac{P_{i-2}(t_i+t_{i+1}+t_{i-2})}{(t_{i+1}-t_{i-2})(t_i-t_{i-2})(t_{i-1}-t_{i-2})}  + \frac{P_{i-3}(2t_{i-1}+t_i)}{(t_i-t_{i-3})(t_{i-1}-t_{i-3})(t_{i-1}-t_{i-2})}
+]\cdot x^2\\
++ [\frac{P_i(3t_{i-1})}{(t_{i+2} - t_{i-1})(t_{i+1} - t_{i-1})(t_i - t_{i-1})}  -  \frac{P_{i-1}(t_{i-2}^2+2t_{i-2}t_{i+2})}{(t_{i+2} - t_{i-1})(t_{i-1} - t_{i-2})(t_i - t_{i-2})}\\
+-\frac{P_{i-1}(t_{i-2}^2+2t_{i-2}t_i)}{(t_{i+1} - t_{i-2})(t_i - t_{i-2})(t_i-t_{i-1})}  -  \frac{P_{i-1}(t_{i-1}t_{i+1}+t_{i-2}t_{i-1}+t_{i-2}t_{i+1})}{(t_{i+1}-t_{i-1})(t_i-t_{i-1})(t_{i-1}-t_{i-2})} \\
++ \frac{P_{i-2}(t_i^2+2t_it_{i-3})}{(t_i-t_{i-3})(t_i-t_{i-2})(t_i-t_{i-1})}  +  \frac{P_{i-2}(t_{i-1}t_{i+1}+t_{i+1}t_{i-3}+t_{i-1}t_{i-3})}{(t_{i-1}-t_{i-3})(t_{i-1}-t_{i-2})(t_i-t_{i-2})} \\
++ \frac{P_{i-2}(t_it_{i-1}+t_it_{i-2}+t_{i+1}t_{i-2})}{(t_{i+1}-t_{i-2})(t_i-t_{i-2})(t_{i-1}-t_{i-2})}  -  \frac{P_{i-3}(t_{i-1}^2+2t_it_{i-1})}{(t_i-t_{i-3})(t_{i-1}-t_{i-3})(t_{i-1}-t_{i-2})}
+]\cdot x\\
+-\frac{P_it_{i-1}^3}{(t_{i+2} - t_{i-1})(t_{i+1} - t_{i-1})(t_i - t_{i-1})}  +  \frac{P_{i-1}t_{i+2}t_{i-2}^2}{(t_{i+2} - t_{i-1})(t_{i-1} - t_{i-2})(t_i - t_{i-2})}\\
++ \frac{P_{i-1}t_{i-2}^2t_i}{(t_{i+1} - t_{i-2})(t_i - t_{i-2})(t_i-t_{i-1})}  +  \frac{P_{i-1}t_{i-1}t_{i+1}t_{i-2}}{(t_{i+1}-t_{i-1})(t_i-t_{i-1})(t_{i-1}-t_{i-2})} \\
+- \frac{P_{i-2}t_i^2t_{i-3}}{(t_i-t_{i-3})(t_i-t_{i-2})(t_i-t_{i-1})}  -  \frac{P_{i-2}t_{i+1}t_{i-1}t_{i-3}}{(t_{i-1}-t_{i-3})(t_{i-1}-t_{i-2})(t_i-t_{i-2})} \\
+- \frac{P_{i-2}t_it_{i+1}t_{i-2}}{(t_{i+1}-t_{i-2})(t_i-t_{i-2})(t_{i-1}-t_{i-2})} + \frac{P_{i-3}t_{i-1}^2t_i}{(t_i-t_{i-3})(t_{i-1}-t_{i-3})(t_{i-1}-t_{i-2})}
+$\\
+,denoted by $P(x) = a_3x^3+a_2x^2+a_1x+a_0 $.
 
 	
 \begin{comment}
-\begin{TeXtoEPS}
-
+\begin{TeXtoEPS}{P_{i-2}}
 \begin{tikzpicture}
 \node[circle,draw,fill=yellow](n4) at (0,0)
 	{$\gamma_4^+$};
