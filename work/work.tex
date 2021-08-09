@@ -26,11 +26,11 @@ $$
 so we can get the basis cubic B-spline $$
 	B_i^3(x) = \begin{dcases}
 	\frac{(x-t_{i-1})^3}{(t_{i+2}-t_{i-1})(t_{i+1}-t_{i-1})(t_i-t_{i-1})} & \left(t_{i-1},t_i\right] \\
-	\frac{(t_{i+1}-x)(x-t_{i-1})^2}{(t_{i+1}-t_i)(t_i-t_{i-1})(t_{i+1}-t_{i-1})} + \frac{(x-t_{i-1})^2(t_{i+1}-x)}{(t_{i+2}-t_{i-1})(t_{i+1}-t_{i-1})(t_{i+1}-t_i)} & \cdots \\ 
+	\frac{(t_{i+3}-x)(x-t_{i})^2}{(t_{i+3}-t_i)(t_{i+1}-t_{i})(t_{i+2}-t_{i})} + \frac{(x-t_{i-1})^2(t_{i+1}-x)}{(t_{i+2}-t_{i-1})(t_{i+1}-t_{i-1})(t_{i+1}-t_i)} & \cdots \\ 
 	 + \frac{(t_{i+2}-x)(x-t_i)(x-t_{i-1})}{(t_{i+2}-t_i)(t_{i+1}-t_i)(t_{i+2}-t_{i-1})} & \left(t_i,t_{i+1} \right] \\
-	\frac{(t_{i+2}-x)^2(x-t_{i-1})}{(t_{i+2}-t_{i-1})(t_{i+2}-t_i)(t_{i+2}-t_{i+1})} + \frac{(t_{i+3}-x)(x-t_{i-1})(t_{i+1}-x)}{(t_{i+1}-t_{i-1})(t_{i+1}-t_i)(t_{i+3}-t_i)} & \cdots\\
-	+\frac{(t_{i+3}-x)(t_{i+2}-x)(x-t_i)}{(t_{i+3}-t_i)(t_{i+2}-t_i)(t_{i+1}-t_i)} & \left(t_{i+1},t_{i+2} \right] \\
-	\frac{(t_{i+3}-x)(t_{i+2}-x)^2}{(t_{i+3}-t_i)(t_{i+2}-t_i)(t_{i+2}-t_{i+1})} & \left(t_{i+2},t_{i+3} \right]
+	\frac{(t_{i+2}-x)^2(x-t_{i-1})}{(t_{i+2}-t_{i-1})(t_{i+2}-t_i)(t_{i+2}-t_{i+1})} + \frac{(t_{i+3}-x)(x-t_{i})(t_{i+2}-x)}{(t_{i+3}-t_i)(t_{i+2}-t_{i})(t_{i+2}-t_{i+1})} & \cdots\\
+	+\frac{(t_{i+3}-x)^2(x-t_{i+1})}{(t_{i+3}-t_i)(t_{i+3}-t_{i+1})(t_{i+2}-t_{i+1})} & \left(t_{i+1},t_{i+2} \right] \\
+	\frac{(t_{i+3}-x)^3}{(t_{i+3}-t_i)(t_{i+3}-t_{i+1})(t_{i+3}-t_{i+2})} & \left(t_{i+2},t_{i+3} \right]
 	\end{dcases}
 $$
 since $\displaystyle P(x) = \sum P_iB_i^3(x) $, thus for every interval$\displaystyle\left(t_{i-1},t_i\right]$,
@@ -55,7 +55,7 @@ Then $\displaystyle P(x) = [\frac{P_i}{(t_{i+2} - t_{i-1})(t_{i+1} - t_{i-1})(t_
 - \frac{P_{i-2}(2t_i+t_{i-3})}{(t_i-t_{i-3})(t_i-t_{i-2})(t_i-t_{i-1})}  -  \frac{P_{i-2}(t_{i+1}+t_{i-1}+t_{i-3})}{(t_{i-1}-t_{i-3})(t_{i-1}-t_{i-2})(t_i-t_{i-2})} \\
 - \frac{P_{i-2}(t_i+t_{i+1}+t_{i-2})}{(t_{i+1}-t_{i-2})(t_i-t_{i-2})(t_{i-1}-t_{i-2})}  + \frac{P_{i-3}(2t_{i-1}+t_i)}{(t_i-t_{i-3})(t_{i-1}-t_{i-3})(t_{i-1}-t_{i-2})}
 ]\cdot x^2\\
-+ [\frac{P_i(3t_{i-1})}{(t_{i+2} - t_{i-1})(t_{i+1} - t_{i-1})(t_i - t_{i-1})}  -  \frac{P_{i-1}(t_{i-2}^2+2t_{i-2}t_{i+2})}{(t_{i+2} - t_{i-1})(t_{i-1} - t_{i-2})(t_i - t_{i-2})}\\
++ [\frac{P_i(3t_{i-1}^2)}{(t_{i+2} - t_{i-1})(t_{i+1} - t_{i-1})(t_i - t_{i-1})}  -  \frac{P_{i-1}(t_{i-2}^2+2t_{i-2}t_{i+2})}{(t_{i+2} - t_{i-1})(t_{i-1} - t_{i-2})(t_i - t_{i-2})}\\
 -\frac{P_{i-1}(t_{i-2}^2+2t_{i-2}t_i)}{(t_{i+1} - t_{i-2})(t_i - t_{i-2})(t_i-t_{i-1})}  -  \frac{P_{i-1}(t_{i-1}t_{i+1}+t_{i-2}t_{i-1}+t_{i-2}t_{i+1})}{(t_{i+1}-t_{i-1})(t_i-t_{i-1})(t_{i-1}-t_{i-2})} \\
 + \frac{P_{i-2}(t_i^2+2t_it_{i-3})}{(t_i-t_{i-3})(t_i-t_{i-2})(t_i-t_{i-1})}  +  \frac{P_{i-2}(t_{i-1}t_{i+1}+t_{i+1}t_{i-3}+t_{i-1}t_{i-3})}{(t_{i-1}-t_{i-3})(t_{i-1}-t_{i-2})(t_i-t_{i-2})} \\
 + \frac{P_{i-2}(t_it_{i-1}+t_it_{i-2}+t_{i+1}t_{i-2})}{(t_{i+1}-t_{i-2})(t_i-t_{i-2})(t_{i-1}-t_{i-2})}  -  \frac{P_{i-3}(t_{i-1}^2+2t_it_{i-1})}{(t_i-t_{i-3})(t_{i-1}-t_{i-3})(t_{i-1}-t_{i-2})}
