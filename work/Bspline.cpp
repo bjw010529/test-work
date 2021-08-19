@@ -6,6 +6,12 @@
 #include<vector>
 using namespace std;
 
+
+
+//==================================== structure ===================================================================================================
+
+#ifndef __POINT__
+#define __POINT__
 struct point{
 	double x,y;
 	point(double x = 0,double y = 0):x(x),y(y){};
@@ -14,7 +20,19 @@ point operator - (point a,point b)
 {
     return point(a.x - b.x,a.y -b.y );
 }
+#endif
 
+//================================= algorithm ======================================================================================================
+
+vector<point> draw_B_spline();
+int  dcmp(double x);
+double cross(point a, point b, point c);
+double dot(point a, point b, point c);
+bool onsegment(point p, point a, point b);
+int isincurve(point p, vector<point> curve);
+vector<point> draw_B_spline();
+
+//================================ algorithm realization ===========================================================================================
 
 const double eps = 1e-10;
 int  dcmp(double x)
@@ -66,9 +84,33 @@ int isincurve(point p, vector<point> curve)
     return 0;				//outside
 }
 
+//========================= the inclusion of jordan curves =========================================================================================
+//	Since the given Jordan curves are disjoint, then I use the "isincurve" function to judge whether a point on curve i is inside curve j, and then 
+//	get the iclusion relation of the curves
+
+
+int **inclu_map(vector <vector<point> > jordan_curves){
+	int n = jordan_curves.size();
+	//cout << n << endl;
+	int **inclusion;	// the inclusion of these jordan curves, initialized as 0, inclusion[i][j] = 1 represents that curve i is inside curve j
+	inclusion = new int*[n];
+	for(int i = 0; i < n; i++){
+		inclusion[i] = new int[n];
+		for(int j = 0; j < n; j++){
+			if(isincurve(jordan_curves[i][0],jordan_curves[j]) == 1)
+				inclusion[i][j] = 1;
+			else
+				inclusion[i][j] = 0;
+			if(i == j)
+				inclusion[i][j] = -1;
+		}
+	}
+	return inclusion; 
+}
 
 //========================== generate the B spline of a jordan curve ===============================================================================
-vector<point> draw_B_spline()
+//	I design this part to directly scan data from input file and generate its B_spline
+vector<point> draw_B_spline()	
 {
 	vector<double> x,y,t;
 	double tmp1,tmp2,tmp;int n = 0;
@@ -92,7 +134,7 @@ vector<point> draw_B_spline()
 
 	vector<point> fit_curve;
 	for(int i = 3; i < n+3; i++){
-		for(int j = 0; j <=1000; j++){
+		for(int j = 0; j <1000; j++){
 			double tmpt = j * (t[i]-t[i-1]) / 1000 + t[i-1];
 			double p1 = pow(tmpt-t[i-1],3) / ((t[i+2]-t[i-1])*(t[i+1]-t[i-1])*(t[i]-t[i-1]));
 
@@ -112,17 +154,45 @@ vector<point> draw_B_spline()
 			point tmpp;
 			tmpp.x = px;tmpp.y = py;
 			//cout << tmpt << endl;
-			//cout << px << " " << py << endl;
+			cout << px << " " << py << endl;
 			fit_curve.push_back(tmpp);
 		}
 	}
 	return fit_curve;
 
 }
+
 int main(int argc, char const *argv[])
 {
-	freopen("Data000.txt","r",stdin);
-	point tmp(0,0);
-	cout << isincurve(tmp,draw_B_spline()) << endl;
+	vector <vector<point> > jordan_curves;
+	int n = 15;		// number of jordan curves
+	for(auto i = 0; i < n; i++){
+
+		//input of jordan curves, tmp_inpath determined by the path of input files
+		string tmp_inpath = "Data000.txt";
+		tmp_inpath[5] += i / 10;
+		tmp_inpath[6] += i % 10;
+		const char* inpath = nullptr;
+		inpath = tmp_inpath.c_str();
+		outpath = tmp_outpath.c_str();
+		freopen(inpath,"r",stdin);
+		jordan_curves.push_back(draw_B_spline());
+		cin.clear();
+		//cout << jordan_curves[i].size() << endl;
+	}
+	fclose(stdin);
+	int **inclusion = inclu_map(jordan_curves);
+	/*freopen("inclusion.csv","w",stdout);
+	for(int i = 0; i < n; i++){
+		for(int j = 0; j < n; j++){
+			if(i != j)
+				cout << inclusion[i][j] << ", ";
+			else cout << " , ";
+		}
+		cout << endl;
+	}
+	cout.clear();*/
+	//cout << isincurve(jordan_curves[13][0],jordan_curves[2]) << endl << isincurve(jordan_curves[2][0],jordan_curves[13]) << endl;
+	//cout << jordan_curves.size() << endl <<  "done" << endl;
 	return 0;
 }
