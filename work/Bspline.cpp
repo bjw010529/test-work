@@ -18,7 +18,7 @@ struct point{
 };
 point operator - (point a,point b)
 {
-    return point(a.x - b.x,a.y -b.y );
+    return point(a.x - b.x, a.y - b.y);
 }
 #endif
 
@@ -26,9 +26,9 @@ point operator - (point a,point b)
 
 vector<point> draw_B_spline();
 int  dcmp(double x);
-double cross(point a, point b, point c);
+double cross(point a, point b);
 double dot(point a, point b, point c);
-bool onsegment(point p, point a, point b);
+//bool onsegment(point p, point a, point b);
 int isincurve(point p, vector<point> curve);
 vector<point> draw_B_spline();
 
@@ -43,19 +43,19 @@ int  dcmp(double x)
         return x < 0?-1:1;
 }
 
-double cross(point a, point b, point c){	// norm of the cross product of vector ab and vector ac
-	return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
+double cross(point a, point b){	// norm of the cross product of vector ab and vector ac
+	return a.x*b.y - a.y*b.x;
 }
 
 double dot(point a, point b, point c){		// the dot product of vector ab and vector ac
 	return (b.x - a.x) * (c.x - a.x) + (b.y - a.y) * (c.y - a.y);
 }
-
+/*
 bool onsegment(point p, point a, point b){
 	//	cross product = 0  	->  p,a,b are collinear
 	//	dot product < 0 	->  p lies between a,b
 	return dcmp(cross(p,a,b)) == 0 && dcmp(dot(p,a,b)) < 0;
-}
+}*/
 
 
 //===================== check whether the point p is inside the jordan curve =======================================================================
@@ -63,23 +63,19 @@ bool onsegment(point p, point a, point b){
 int isincurve(point p, vector<point> curve)
 {
     int wn = 0;
-    point tmp = curve[curve.size()-1];
-    curve.push_back(tmp);
-    for(int i = 0; i < curve.size(); i++)
-    {
-        if(onsegment(p,curve[i],curve[i+1]) ){
-        	curve.pop_back();
-        	return -1;		//on the boundary
-        }
-        int k = dcmp(cross(curve[i],curve[i+1],p));
+    int n = curve.size();
+    for(int i = 0; i < n; i++){
+        //if(onsegment(p,curve[i],curve[(i+1)%n]) )		return -1;		//on the boundary
+        int k = dcmp(cross(curve[(i+1)%n]-curve[i],p-curve[i]));
         int d1 = dcmp(curve[i].y - p.y);
-        int d2 = dcmp(curve[i+1].y - p.y);
+        int d2 = dcmp(curve[(i+1)%n].y - p.y);
         
-        if(k > 0 && d1 <= 0 && d2 > 0)	wn++;
-        if(k < 0 && d2 <= 0 && d1 > 0)	wn--;
+        if(k > 0 && d1 <= 0 && d2 > 0)	
+        	wn++;
+        if(k < 0 && d2 <= 0 && d1 > 0)	
+        	wn--;
  
     }
-    curve.pop_back();
     if(wn != 0)return 1;	//inside
     return 0;				//outside
 }
@@ -91,7 +87,6 @@ int isincurve(point p, vector<point> curve)
 
 int **inclu_map(vector <vector<point> > jordan_curves){
 	int n = jordan_curves.size();
-	//cout << n << endl;
 	int **inclusion;	// the inclusion of these jordan curves, initialized as 0, inclusion[i][j] = 1 represents that curve i is inside curve j
 	inclusion = new int*[n];
 	for(int i = 0; i < n; i++){
@@ -154,7 +149,7 @@ vector<point> draw_B_spline()
 			point tmpp;
 			tmpp.x = px;tmpp.y = py;
 			//cout << tmpt << endl;
-			cout << px << " " << py << endl;
+			//cout << px << " " << py << endl;
 			fit_curve.push_back(tmpp);
 		}
 	}
@@ -174,15 +169,13 @@ int main(int argc, char const *argv[])
 		tmp_inpath[6] += i % 10;
 		const char* inpath = nullptr;
 		inpath = tmp_inpath.c_str();
-		outpath = tmp_outpath.c_str();
 		freopen(inpath,"r",stdin);
 		jordan_curves.push_back(draw_B_spline());
 		cin.clear();
 		//cout << jordan_curves[i].size() << endl;
 	}
 	fclose(stdin);
-	int **inclusion = inclu_map(jordan_curves);
-	/*freopen("inclusion.csv","w",stdout);
+	int **inclusion = inclu_map(jordan_curves);		//	the map of inclusion of the curves
 	for(int i = 0; i < n; i++){
 		for(int j = 0; j < n; j++){
 			if(i != j)
@@ -191,8 +184,7 @@ int main(int argc, char const *argv[])
 		}
 		cout << endl;
 	}
-	cout.clear();*/
-	//cout << isincurve(jordan_curves[13][0],jordan_curves[2]) << endl << isincurve(jordan_curves[2][0],jordan_curves[13]) << endl;
-	//cout << jordan_curves.size() << endl <<  "done" << endl;
+
+
 	return 0;
 }
