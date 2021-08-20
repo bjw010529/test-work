@@ -129,8 +129,8 @@ vector<point> draw_B_spline()
 
 	vector<point> fit_curve;
 	for(int i = 3; i < n+3; i++){
-		for(int j = 0; j <1000; j++){
-			double tmpt = j * (t[i]-t[i-1]) / 1000 + t[i-1];
+		for(int j = 0; j <100; j++){
+			double tmpt = j * (t[i]-t[i-1]) / 100 + t[i-1];
 			double p1 = pow(tmpt-t[i-1],3) / ((t[i+2]-t[i-1])*(t[i+1]-t[i-1])*(t[i]-t[i-1]));
 
 			double p2 = pow(tmpt-t[i-1],2)*(t[i+2]-tmpt) / ((t[i+2]-t[i-1])*(t[i]-t[i-1])*(t[i+1]-t[i-1])) 
@@ -149,7 +149,7 @@ vector<point> draw_B_spline()
 			point tmpp;
 			tmpp.x = px;tmpp.y = py;
 			//cout << tmpt << endl;
-			//cout << px << " " << py << endl;
+			cout << px << " " << py << endl;
 			fit_curve.push_back(tmpp);
 		}
 	}
@@ -164,17 +164,30 @@ int main(int argc, char const *argv[])
 	for(auto i = 0; i < n; i++){
 
 		//input of jordan curves, tmp_inpath determined by the path of input files
-		string tmp_inpath = "Data000.txt";
+		string tmp_inpath = "Data000.txt";string tmp_outpath = "output000.txt";
 		tmp_inpath[5] += i / 10;
+		tmp_outpath[7] = tmp_inpath[5];
 		tmp_inpath[6] += i % 10;
+		tmp_outpath[8] = tmp_inpath[6];
 		const char* inpath = nullptr;
+		const char* outpath = nullptr;
 		inpath = tmp_inpath.c_str();
+		outpath = tmp_outpath.c_str();
 		freopen(inpath,"r",stdin);
+		freopen(outpath,"w",stdout);
+
+
 		jordan_curves.push_back(draw_B_spline());
+
+		
 		cin.clear();
-		//cout << jordan_curves[i].size() << endl;
+		cout.clear();
 	}
 	fclose(stdin);
+
+
+	freopen("inclusion.csv","w",stdout);
+	// print "inclusion"
 	int **inclusion = inclu_map(jordan_curves);		//	the map of inclusion of the curves
 	for(int i = 0; i < n; i++){
 		for(int j = 0; j < n; j++){
@@ -184,7 +197,7 @@ int main(int argc, char const *argv[])
 		}
 		cout << endl;
 	}
-
-
+	cout.clear();
+	fclose(stdout);
 	return 0;
 }
