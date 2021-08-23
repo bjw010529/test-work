@@ -1,5 +1,5 @@
 \documentclass[]{article}
-\usepackage{amsmath,amsfonts,pstricks,pst-eps,tikz,verbatim,mathtools,graphicx,dirtree}
+\usepackage{amsmath,amsfonts,pstricks,pst-eps,tikz,verbatim,mathtools,graphicx,dirtree,cite}
 \pagestyle{empty}
 \title{Final project}
 \author{Jiawen Bi}
@@ -9,10 +9,23 @@
 \maketitle
 
 
+\section{Preparation}
+In this project, I am trying to use the B-spline algorithm in \cite{numana} and some ideas mentioned in \cite{zhang2019fluid} to represent a cartoon.
+\par
+\begin{figure}[ht]
+	\centering
+	\includegraphics[scale = 0.8]{fig.jpg}
+	\caption{Peppa Pig}
+	\label{fig:fig}
+\end{figure}
+In this situation, I choose a cartoon picture of Peppa Pig as in Figure 1
+and use "grabit"(a mathtool in MATLAB) to pick points and store the points of each curve in "Data000.txt", $\cdots$, "Data014.txt",respectively.\par
+
+
+
 %=============================================================================================================================================================
 
-\section{Preparation and B-spline algorithm}
-\par
+\section{B-spline algorithm}
 The whole function is $$
     P(x) = \sum_{i=0}^n P_i B_i^k(x)
    	$$
@@ -52,15 +65,6 @@ since $\displaystyle P(x) = \sum P_iB_i^3(x) $, thus for every interval$\display
 	&+ P_{i-3}\frac{-x^3 + (2t_{i-1}+t_i)x^2 - (t_{i-1}^2+2t_it_{i-1})x + t_{i-1}^2t_i}  {(t_i-t_{i-3})(t_{i-1}-t_{i-3})(t_{i-1}-t_{i-2})}
 \end{align*}
 Applying this equation to $x$ and $y$, we can get the B-spline curve. For more details, please refer to my C++ code.
-\par
-\begin{figure}[ht]
-	\centering
-	\includegraphics[scale = 0.8]{fig.jpg}
-	\caption{Peppa Pig}
-	\label{fig:fig}
-\end{figure}
-In this situation, I choose a cartoon picture of Peppa Pig as in Figure 1
-and use "grabit"(a mathtool in MATLAB) to pick points and store the points of each curve in "Data000.txt", $\cdots$, "Data014.txt",respectively.
 
 
 %=============================================================================================================================================================
@@ -112,7 +116,7 @@ we can get the folowing directory tree:
    .3 {Bspline.h} .
    .3 {inclusion.h} .
 }
-
+In this directory, 
 
 %=============================================================================================================================================================
 \section{Hasse diagram}
@@ -152,7 +156,6 @@ we can plot the Hasse diagram as below:\\
 	};
 
 \end{tikzpicture}
-%\begin{TeXtoEPS}
 
 
 %=============================================================================================================================================================
@@ -186,7 +189,9 @@ $\mathcal{F}_7 = \left\{\gamma_{13}^+\right\} $,$\mathcal{F}_8 = \left\{\gamma_{
 	\draw[draw = red,fill = red!20,scale = 0.04]  plot file {plots/output013.txt}	node[right]{$\gamma_{13}^+$};
 	\draw[draw = red,fill = red!20,scale = 0.04]  plot file {plots/output014.txt}	node[right]{$\gamma_{14}^+$};
 \end{tikzpicture}
-%\end{TeXtoEPS}
+
+\bibliographystyle{plain}
+\bibliography{work}
 
 
 \end{document}
