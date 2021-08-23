@@ -10,6 +10,9 @@ main : main.cpp
 	g++ -o main main.cpp
 	./main
 	xelatex work.tex
+	bibtex work.aux
+	xelatex work.tex
+	xelatex work.tex
 .PHONY : clean
 
 clean :
