@@ -148,7 +148,10 @@ public:
 	void acquire(vector<vector<point> > cur);
 	void show_orientation();
 	void show_inclusion();
-	void ori_inverse(int i)
+	void ori_inverse(int i);
+	yinset intersect(yinset curve1, yinset curve2);
+	yinset union(yinset curve1, yinset curve2);
+	yinset exterior(yinset curve);
 };
 
 //------------------------------------------------------------------------------------------------------------------
