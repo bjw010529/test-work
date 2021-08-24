@@ -6,7 +6,7 @@ $(shell mkdir -p $(OBJDIR))
 endif
 $(info $(mkdir_shell))
 
-main : main.cpp
+main : main.cpp work.tex work.bib
 	g++ -o main main.cpp
 	./main
 	xelatex work.tex
@@ -16,4 +16,4 @@ main : main.cpp
 .PHONY : clean
 
 clean :
-	rm work.aux work.log
+	
