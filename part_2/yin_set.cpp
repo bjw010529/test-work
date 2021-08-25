@@ -130,7 +130,7 @@ vector<point> draw_B_spline()
 
 
 
-
+//------------------------------------------------------------------------------------------------------------------
 class yinset{
 
 private:
@@ -149,9 +149,9 @@ public:
 	void show_orientation();
 	void show_inclusion();
 	void ori_inverse(int i);
-	yinset intersect(yinset curve1, yinset curve2);
-	yinset union(yinset curve1, yinset curve2);
-	yinset exterior(yinset curve);
+	yinset intersect(yinset yin1, yinset yin2);
+	yinset uunion(yinset yin1, yinset yin2);
+	yinset exterior(yinset yin);
 };
 
 //------------------------------------------------------------------------------------------------------------------
@@ -177,7 +177,7 @@ void yinset::set_orientation(){
 		int sum = 0;
 		for(int j = 0; j < size; j++)
 			sum += inclusion[i][j];
-		orientation.push_back(sum % 2);
+		orientation.push_back(sum);
 		//show_orientation();
 	}
 }
@@ -213,7 +213,36 @@ void yinset::ori_inverse(int i){
 	orientation[i] = 1 - orientation[i];
 }
 
+yinset yinset::uunion(yinset yin1, yinset yin2){
+	yinset return_val;
+	vector<vector<point> > return_curve;
+
+
+	//return_curve.push_back(curve_union(yin1.curves[i],yin2.curves[j]));
+	//return_curve.push_back()
+	return_val.acquire(return_curve);
+	return return_val;
+}
+
+yinset yinset::intersect(yinset yin1, yinset yin2){
+	yinset return_val;
+	vector<vector<point> > return_curve;
+	return_val.acquire(return_curve);
+	return return_val;
+}
+
+yinset yinset::exterior(yinset yin){
+	yinset return_val = yin;
+	for(int i = 0; i < yin.size; i++)
+		return_val.ori_inverse(i);
+	return return_val;
+}
+
 #endif
+
+
+//------------------------------------------------------------------------------------------------------------------
+
 
 int main(int argc, char const *argv[])
 {
@@ -221,7 +250,7 @@ int main(int argc, char const *argv[])
 	int n = 15;		// number of jordan curves
 	for(auto i = 0; i < n; i++){
 
-		//input of jordan curves, tmp_inpath determined by the path of input files
+		//input of jordan curves, tmp_inpath/tmp_outpath determined by the path of input/output files
 		string tmp_inpath = "./data/Data000.txt";string tmp_outpath = "./plots/output000.txt";
 		tmp_inpath[12] += i / 10;
 		tmp_outpath[15] = tmp_inpath[12];
