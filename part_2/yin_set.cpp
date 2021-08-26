@@ -117,15 +117,38 @@ vector<point> draw_B_spline()
 
 //------------------------------------------------------------------------------------------------------------------
 
+point point_intersect(point a1,point a2,point b1,point b2){
+	point intersect;
+	double area1 = (a1.x - b1.x) * (a2.y - b1.y) - (a1.y - b1.y) * (a2.x - b1.x);	//area of a1a2b1
+	double area2 = (a1.x - b2.x) * (a2.y - b2.y) - (a1.y - b2.y) * (a2.x - b2.x);	//area of a1a2b2
+	double area3 = (b1.x - a1.x) * (b2.y - a1.y) - (b1.x - a1.x) * (b2.x - a1.x);	//area of b1b2a1
+	double area4 = area3 + area1 - area2;											//area of b1b2a2
+	if(area1 * area2 >= 0){
+		intersect.x = 0 / 0;
+		intersect.y = 0 / 0;
+		return intersect;
+	}
+	if(area3 * area4 >= 0){
+		intersect.x = 0 / 0;
+		intersect.y = 0 / 0;
+		return intersect;
+	}
+	double t = area3 / (area2 - area1);
+	double dx = t * (a2.x - a1.x);
+	double dy = t * (a2.y - a1.y);
+	intersect.x = a1.x + dx;
+	intersect.y = a1.y + dy;
+	return intersect;
+}
 
+vector<point> curve_union(vector<point> curve1, vector<point> curve2){
+	int start_it = 0;
+	while(isincurve(curve1[start_it]))
+}
 
+vector<point> curve_inter(vector<point> curve1, vector<point> curve2){
 
-
-
-
-
-
-
+}
 
 
 
